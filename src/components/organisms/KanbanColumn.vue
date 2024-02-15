@@ -1,0 +1,45 @@
+<script lang="ts">
+import { PropType, computed, defineComponent } from 'vue';
+import KanbanCard from '../molecules/KanbanCard.vue';
+import { ICard } from '../../utils/types';
+
+export default defineComponent({
+    name: "KanbanColumn",
+    components: { KanbanCard },
+    props: {
+        status: String,
+        cards: Array as PropType<ICard[]>
+    },
+    emits: ['moveCard'],
+    setup: (props, { emit }) => {
+        const cards = computed(() => props.cards ?? []);
+        const status = computed(() => props.status ?? "");
+
+        const drop = event => {
+            const cardId = event.dataTransfer.getData('text/plain');
+            emit('moveCard', parseInt(cardId, 10), props.status);
+        };
+        return {
+            cards,
+            status,
+            drop
+        }
+    },
+})
+</script>
+
+<template>
+  <div
+    class="kanban-column bg-white shadow rounded p-4 flex-1 mx-2"
+    @dragover.prevent
+    @drop="drop($event)"
+  >
+    <h2 class="font-bold mb-2">{{ status }}</h2>
+    <KanbanCard
+      v-for="card in cards"
+      :key="card.id"
+      :card="card"
+    ></KanbanCard>
+  </div>
+
+</template>
