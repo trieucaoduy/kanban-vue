@@ -43,17 +43,19 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex justify-center align-center p-5 ">
-    <AddTaskButton @openModal="openModal" />
+  <div class="kanban-main">
+    <div class="flex justify-center align-center p-5 ">
+      <AddTaskButton @openModal="openModal" />
+    </div>
+    <div class="flex justify-around p-5 bg-gray-100" style="min-height: 80vh">
+      <KanbanColumn
+        v-for="status in columnStatuses"
+        :key="status"
+        :status="status"
+        :cards="cards.filter(card => card.status === status)"
+        @moveCard="moveCard"
+      ></KanbanColumn>
+    </div>
+    <NewTaskModal :show="showModal" @addTask="onAddTask" />
   </div>
-  <div class="flex justify-around p-5 bg-gray-100 min-h-screen">
-    <KanbanColumn
-      v-for="status in columnStatuses"
-      :key="status"
-      :status="status"
-      :cards="cards.filter(card => card.status === status)"
-      @moveCard="moveCard"
-    ></KanbanColumn>
-  </div>
-  <NewTaskModal :show="showModal" @addTask="onAddTask" />
 </template>
