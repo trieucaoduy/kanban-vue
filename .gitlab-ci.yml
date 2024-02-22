@@ -9,11 +9,11 @@ stages:
 
 build:
   stage: build
-  services:
-    - docker:18.09.7-dind
   before_script:
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
+    - yum update -y
+    - yum install -y docker
     - docker --version
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker image tag $IMAGE_NAME:$IMAGE_TAG $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
