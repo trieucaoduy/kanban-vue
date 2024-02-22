@@ -9,6 +9,8 @@ stages:
 
 build:
   stage: build
+  services:
+    - docker:18.09.7-dind
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
