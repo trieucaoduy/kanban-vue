@@ -10,7 +10,6 @@ stages:
 build:
   stage: build
   before_script:
-    - yum update -y
     - yum install -y docker
     - docker --version
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
