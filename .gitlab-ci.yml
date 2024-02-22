@@ -10,7 +10,8 @@ stages:
 build:
   stage: build
   before_script:
-    - yum install -y docker
+    - apt-get update -qy
+    - apt-get install -y docker.io
     - docker --version
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
