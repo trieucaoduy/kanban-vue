@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Kanban from '../pages/Kanban.vue'
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_API_BASE_URL),
   routes: [
     {
       path: '/',
