@@ -3,9 +3,6 @@ variables:
   IMAGE_TAG: latest
   CONTAINER_NAME: frontend-kanban-container
 
-image:
-  entrypoint: [ "/bin/bash", "-lc" ]
-
 stages:
   - build
   - deploy
