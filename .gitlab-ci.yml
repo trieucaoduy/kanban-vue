@@ -3,6 +3,9 @@ variables:
   IMAGE_TAG: latest
   CONTAINER_NAME: frontend-kanban-container
 
+image:
+  entrypoint: [ "/bin/bash", "-lc" ]
+
 stages:
   - build
   - deploy
@@ -10,6 +13,7 @@ stages:
 build:
   stage: build
   before_script:
+    - docker info
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
