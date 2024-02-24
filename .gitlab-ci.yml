@@ -1,6 +1,5 @@
 variables:
   IMAGE_NAME: frontend/kanban-vue
-  IMAGE_TAG: echo $(date +%y.%m)
   CONTAINER_NAME: frontend-kanban-container
 
 stages:
@@ -10,6 +9,7 @@ stages:
 build:
   stage: build
   before_script:
+    - export IMAGE_TAG=$(date +%y.%m)
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
