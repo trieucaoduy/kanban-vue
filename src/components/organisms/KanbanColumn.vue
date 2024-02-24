@@ -37,7 +37,7 @@ export default defineComponent({
     @dragover.prevent
     @drop="drop($event)"
   >
-    <h2 class="font-bold mb-2 p-2" :style="{ background: column.color, color: '#fff' }">{{ status }}</h2>
+    <h2 class="font-bold mb-2 p-2 uppercase" :style="{ background: column.color, color: '#fff' }">{{ status }}</h2>
     <KanbanCard
       v-for="card in cards"
       :key="card.id"
