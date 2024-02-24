@@ -1,6 +1,6 @@
 variables:
   IMAGE_NAME: frontend/kanban-vue
-  IMAGE_TAG: $(date +%y.%m)
+  IMAGE_TAG: echo $(date +%y.%m)
   CONTAINER_NAME: frontend-kanban-container
 
 stages:
