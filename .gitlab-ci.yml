@@ -10,6 +10,7 @@ build:
   stage: build
   before_script:
     - export IMAGE_TAG=$(date +%y.%m)
+    - echo $IMAGE_NAME:$IMAGE_TAG
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
