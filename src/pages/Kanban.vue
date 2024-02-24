@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import KanbanColumn from '../components/organisms/KanbanColumn.vue';
 import NewTaskModal from '../components/molecules/NewTaskModal.vue';
 import AddTaskButton from '../components/atoms/AddTaskButton.vue';
@@ -13,6 +13,12 @@ export default defineComponent({
           { id: 1, title: 'Task 1', status: 'New' },
       ]);
       const columnStatuses = ['New', 'To Do', 'In Progress', 'Done'];
+      const columnList = [
+        { id: 'new', title: 'New', color: '#a78bfa' },
+        { id: 'todo', title: 'To do', color: '#f59e0b' },
+        { id: 'inprocess', title: 'In Progress', color: '#0ea5e9' },
+        { id: 'done', title: 'Done', color: '#22c55e' },
+      ]
       const moveCard = (cardId, newStatus) => {
           const card = cards.value.find(card => card.id === cardId);
           if (card) {
@@ -34,6 +40,7 @@ export default defineComponent({
         showModal,
         cards,
         columnStatuses,
+        columnList,
         moveCard,
         openModal,
         onAddTask
@@ -49,10 +56,11 @@ export default defineComponent({
     </div>
     <div class="flex justify-around p-5 bg-gray-100" style="min-height: 80vh">
       <KanbanColumn
-        v-for="status in columnStatuses"
-        :key="status"
-        :status="status"
-        :cards="cards.filter(card => card.status === status)"
+        v-for="column in columnList"
+        :key="column.title"
+        :status="column.title"
+        :column="column"
+        :cards="cards.filter(card => card.status === column.title)"
         @moveCard="moveCard"
       ></KanbanColumn>
     </div>
