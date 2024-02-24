@@ -1,6 +1,6 @@
 variables:
   IMAGE_NAME: frontend/kanban-vue
-  IMAGE_TAG: latest
+  IMAGE_TAG: $(date '+%Y-%m-%d')
   CONTAINER_NAME: frontend-kanban-container
 
 stages:
