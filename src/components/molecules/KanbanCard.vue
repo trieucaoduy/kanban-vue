@@ -31,7 +31,7 @@ export default defineComponent({
 
 <template>
   <div
-    :class="`kanban-card bg-gray-100 rounded shadow p-3 mb-2 cursor-pointer relative ${getClassCard(card.status)}`"
+    :class="`kanban-card bg-gray-100 uppercase rounded shadow p-3 mb-2 cursor-pointer relative ${getClassCard(card.status)}`"
     draggable="true"
     @dragstart="dragStart($event, card)"
   >

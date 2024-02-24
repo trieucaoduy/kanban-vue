@@ -17,6 +17,7 @@ build:
     - docker image tag $IMAGE_NAME:$IMAGE_TAG $CI_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
     - docker push $CI_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
     - docker image rm -f $IMAGE_NAME:$IMAGE_TAG
+    - docker rm -f $CONTAINER_NAME
     
   only:
     - master
@@ -25,6 +26,6 @@ build:
 deploy:
   stage: deploy
   script:
-    - docker run -d --name $CONTAINER_NAME -p 80:80 $CI_REGISTRY_IMAGE/$IMAGE_NAME:$IMAGE_TAG
+    - docker run -d --name $CONTAINER_NAME -p 80:80 $CI_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
   only:
     - master
