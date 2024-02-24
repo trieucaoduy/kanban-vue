@@ -1,5 +1,5 @@
 variables:
-  IMAGE_NAME: frontend/kanban-vue
+  IMAGE_NAME: frontend/kanban-vue/20240224
   CONTAINER_NAME: frontend-kanban-container
   IMAGE_TAG: "20240224.2214"
 
