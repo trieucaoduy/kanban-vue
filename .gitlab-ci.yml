@@ -1,6 +1,6 @@
 variables:
   IMAGE_NAME: frontend/kanban-vue
-  IMAGE_TAG: "${CI_COMMIT_REF_NAME}-$(echo ${CI_COMMIT_TIMESTAMP} | tr -d ':').${CI_COMMIT_SHA:0:8}"
+  IMAGE_TAG: "$(date +%y.%m)"
   CONTAINER_NAME: frontend-kanban-container
 
 stages:
