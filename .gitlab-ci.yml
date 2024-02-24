@@ -1,7 +1,7 @@
 variables:
   IMAGE_NAME: frontend/kanban-vue
   CONTAINER_NAME: frontend-kanban-container
-  IMAGE_TAG: 20240224.2214
+  IMAGE_TAG: "20240224.2214"
 
 stages:
   - build
