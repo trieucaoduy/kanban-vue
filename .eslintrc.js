@@ -2,6 +2,8 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    browser: true,
+    es6: true,
   },
   parser: "vue-eslint-parser",
   parserOptions: {
@@ -10,18 +12,24 @@ module.exports = {
     sourceType: "module",
   },
   extends: [
+    "plugin:vue/vue3-essential",
+    "plugin:vue/vue3-recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint:recommended",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
     "plugin:vue/vue3-recommended",
     //"plugin:vue/recommended",
-    "prettier/vue",
+    "@vue/prettier",
+    "@vue/typescript/recommended",
   ],
-  plugins: ["prettier", "@typescript-eslint"],
+  plugins: ["vue", "prettier", "@typescript-eslint"],
   rules: {
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars-experimental": "error",
+    "no-unused-vars": "off", // Show error for unused variables
+    "@typescript-eslint/no-unused-vars": "error",
   },
   "ignorePatterns": ["dist"],
+  "prettier/prettier": [
+    "warn",
+  ]
 };

@@ -10,24 +10,22 @@ export default defineComponent({
     setup: () => {
       const showModal = ref(false);
       const cards = ref([
-          { id: 1, title: 'Task 1', status: 'New' },
+          { id: 1, title: 'Task 1', status: 'To Do' },
       ]);
-      const columnStatuses = ['New', 'To Do', 'In Progress', 'Done'];
+      const columnStatuses = ['To Do', 'In Progress', 'Review', 'Done'];
       const columnList = [
-        { id: 'new', title: 'New', color: '#a78bfa' },
         { id: 'todo', title: 'To do', color: '#f59e0b' },
         { id: 'inprocess', title: 'In Progress', color: '#0ea5e9' },
+        { id: 'review', title: 'Review', color: '#a78bfa' },
         { id: 'done', title: 'Done', color: '#22c55e' },
       ]
       const moveCard = (cardId: number, newStatus: string) => {
           const card = cards.value.find(card => card.id === cardId);
-          if (card) {
-              card.status = newStatus;
-          }
+          if (card) card.status = newStatus;
       };
       const openModal = (value: boolean) => showModal.value = value;
       const createItemTask = (taskValue: any) => {
-        return { id: cards.value.length + 1, title: taskValue, status: 'New' };
+        return { id: cards.value.length + 1, title: taskValue, status: 'To do' };
       }
 
       const onAddTask = (isAdded: any, taskValue: any) => {
@@ -54,7 +52,7 @@ export default defineComponent({
     <div class="flex justify-center align-center p-5 ">
       <AddTaskButton @openModal="openModal" />
     </div>
-    <div class="flex justify-around p-5 bg-gray-100" style="min-height: 80vh">
+    <div class="flex p-5 overflow-x-auto" style="min-height: 80vh">
       <KanbanColumn
         v-for="column in columnList"
         :key="column.title"

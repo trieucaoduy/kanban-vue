@@ -31,11 +31,18 @@ export default defineComponent({
 
 <template>
   <div
-    :class="`kanban-card bg-gray-100 rounded shadow p-3 mb-2 cursor-pointer relative ${getClassCard(card.status)}`"
+    class="kanban-card bg-white rounded-lg shadow p-3 mb-2 cursor-pointer relative"
     draggable="true"
     @dragstart="dragStart($event, card)"
   >
-    {{ card.title }}
+    <div class="kanban-card__title">{{ card.title }}</div>
+    <div class="kanban-card__body">
+      <p class="kanban-card__summary py-2">Summay task</p>
+    </div>
+    <div class="kanban-card__footer flex justify-between">
+      <div class="kanban-card__checklist"><i class="fas fa-tasks"></i> 2/4</div>
+      <div class="kanban-card__due-date">Due 4 days</div>
+    </div>
   </div>
 </template>
 
@@ -60,5 +67,9 @@ export default defineComponent({
   }
   .kanban-card.done::before {
     background-color: #22c55e;
+  }
+
+  .kanban-card {
+    box-shadow: 0 0.1875rem 0.375rem rgba(33, 37, 41, 0.05);
   }
 </style>

@@ -13,31 +13,33 @@ export default defineComponent({
     },
     emits: ['moveCard'],
     setup: (props, { emit }) => {
-        const cards = computed(() => props.cards ?? []);
-        const status = computed(() => props.status ?? "");
-        const column = computed(() => props.column ?? {})
+      console.log({ props })
+      const cards = computed(() => props.cards ?? []);
+      const status = computed(() => props.status ?? "");
+      const column = computed(() => props.column ?? {})
 
-        const drop = (event: DragEvent) => {
-            const cardId = (event.dataTransfer as DataTransfer).getData('text/plain');
-            emit('moveCard', parseInt(cardId, 10), props.status);
-        };
-        return {
-            cards,
-            status,
-            column,
-            drop
-        }
+      const drop = (event: DragEvent) => {
+        const cardId = (event.dataTransfer as DataTransfer).getData('text/plain');
+        emit('moveCard', parseInt(cardId, 10), props.status);
+      };
+      return {
+        cards,
+        status,
+        column,
+        drop
+      }
     },
 })
 </script>
 
 <template>
   <div
-    class="kanban-column bg-white shadow rounded flex-1 mx-2"
+    class="kanban-columnwhite bg-slate-50 rounded-lg flex-1 mx-2 w-80 overflow-y-auto"
+    :style="{'min-width': '20rem', 'max-width': '20rem', 'height': '80vh', 'max-height': '80vh'}"
     @dragover.prevent
     @drop="drop($event)"
   >
-    <h2 class="font-bold mb-2 p-2 uppercase" :style="{ background: column.color, color: '#fff' }">{{ status }}</h2>
+    <h2 class="font-bold mb-2 p-2 uppercase" :style="{ 'color': column.color }">{{ status }}</h2>
     <KanbanCard
       v-for="card in cards"
       :key="card.id"
