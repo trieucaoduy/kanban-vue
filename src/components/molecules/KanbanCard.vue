@@ -9,12 +9,12 @@ export default defineComponent({
     columnColor: String,
   },
   setup: (props) => {
-    const dragStart = (event, card) => {
-      event.dataTransfer.setData('text/plain', card.id);
+    const dragStart = (event: DragEvent, card: ICard) => {
+      (event.dataTransfer as DataTransfer).setData('text/plain', card.id.toString());
     };
     const card = computed(() => props.card as ICard);
 
-    const getClassCard = (status) => {
+    const getClassCard = (status: string) => {
       return status.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
           return index == 0 ? word.toLowerCase() : word.toUpperCase();
       }).replace(/\s+/g, '');

@@ -19,18 +19,18 @@ export default defineComponent({
         { id: 'inprocess', title: 'In Progress', color: '#0ea5e9' },
         { id: 'done', title: 'Done', color: '#22c55e' },
       ]
-      const moveCard = (cardId, newStatus) => {
+      const moveCard = (cardId: number, newStatus: string) => {
           const card = cards.value.find(card => card.id === cardId);
           if (card) {
               card.status = newStatus;
           }
       };
-      const openModal = (value) => showModal.value = value;
-      const createItemTask = (taskValue) => {
+      const openModal = (value: boolean) => showModal.value = value;
+      const createItemTask = (taskValue: any) => {
         return { id: cards.value.length + 1, title: taskValue, status: 'New' };
       }
 
-      const onAddTask = (isAdded, taskValue) => {
+      const onAddTask = (isAdded: any, taskValue: any) => {
         showModal.value = false;
         const dataTask = createItemTask(taskValue);
         cards.value.push(dataTask);

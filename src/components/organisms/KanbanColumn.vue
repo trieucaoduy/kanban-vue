@@ -17,8 +17,8 @@ export default defineComponent({
         const status = computed(() => props.status ?? "");
         const column = computed(() => props.column ?? {})
 
-        const drop = event => {
-            const cardId = event.dataTransfer.getData('text/plain');
+        const drop = (event: DragEvent) => {
+            const cardId = (event.dataTransfer as DataTransfer).getData('text/plain');
             emit('moveCard', parseInt(cardId, 10), props.status);
         };
         return {
