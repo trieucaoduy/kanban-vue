@@ -1,7 +1,7 @@
 interface ICard {
-    id: string | number,
-    title: string,
-    status: string,
+    name: string;
+    id: number;
+    status: string;
 }
 
 export { ICard }
