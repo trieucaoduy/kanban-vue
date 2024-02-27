@@ -15,16 +15,17 @@ export default defineComponent({
     cardList: Array as PropType<ICard[]>
   },
   display: 'Transition',
-  order: 6,
   components: {
     draggable: VueDraggableNext,
     KanbanCard,
   },
+  emits: ['openAddTaskDialog'],
   setup: (props, { emit }) => {
-
-    console.log({ props })
-
+    const openAddTaskDialog = (column: any) => {
+      emit('openAddTaskDialog', column);
+    }
     return {
+      openAddTaskDialog,
     }
   },
 })
@@ -33,10 +34,10 @@ export default defineComponent({
 <template>
   <div class="kanban-column bg-slate-50 rounded-lg w-80 p-4 mx-2 h-fit">
     <div class="flex justify-between mt-3">
-      <h2 class="font-bold uppercase" :style="{ 'color': column.color }">{{ column.title }}</h2>
+      <h2 class="font-bold uppercase text-ellipsis overflow-hidden" :style="{ 'color': column.color }">{{ column.title }}</h2>
       <i class="fa-solid fa-bars handle cursor-pointer"></i>
     </div>
-    <draggable class="dragArea list-group w-full" :list="cardList" group="people">
+    <draggable class="kanban-column__drag-area overflow-auto dragArea list-group w-full my-2" :list="cardList" group="people">
       <transition-group type="transition" name="flip-list">
         <KanbanCard
           v-for="element in cardList"
@@ -45,11 +46,20 @@ export default defineComponent({
         />
       </transition-group>
     </draggable>
-    <button class="btn border border-blue-500 rounded text-blue-500 w-full" :style="'font-weight: normal'">Add task</button>
+    <button
+      class="btn border border-blue-500 rounded text-blue-500 w-full"
+      :style="'font-weight: normal'"
+      @click="openAddTaskDialog(column)"
+    >
+      Add task
+    </button>
   </div>
 </template>
 
 <style scoped>
+.kanban-column__drag-area {
+  max-height: 75vh;
+}
 .button {
   margin-top: 35px;
 }

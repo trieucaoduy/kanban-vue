@@ -12,55 +12,57 @@
           :key="element.type"
           :column="element"
           :cardList="element.items"
+          @openAddTaskDialog="onOpenAddTaskDialog"
         />
       </transition-group>
     </draggable>
   </div>
+  <NewTaskModal
+   :visible="isVisableAddTask"
+   @addTask="onAddTask"
+   />
 </template>
 <script>
   import { defineComponent, ref } from 'vue';
   import { VueDraggableNext } from 'vue-draggable-next';
   import KanbanColumn from '@/components/organisms/KanbanColumn.vue';
+  import NewTaskModal from '@/components/molecules/NewTaskModal.vue';
+  import { COLUMN_LIST } from '@/utils/constants';
 
   export default defineComponent({
     components: {
       draggable: VueDraggableNext,
       KanbanColumn,
+      NewTaskModal
     },
     setup: () => {
-      const columnList = ref([
-        {
-          type: 'todo',
-          title: 'To do',
-          color: '#f59e0b',
-          items: [
-            { name: 'John', id: 1, status: 'todo' }
-          ]
-        },
-        {
-          type: 'inprogress',
-          title: 'In Progress',
-          color: '#0ea5e9',
-          items: [
-            { name: 'Jean', id: 3, status: 'inprogress' }
-          ]
-        },
-        {
-          type: 'review',
-          title: 'Review',
-          color: '#a78bfa',
-          items: []
-        },
-        {
-          type: 'done',
-          title: 'Done',
-          color: '#22c55e',
-          items: []
-        },
-      ]);
+      const columnList = ref(COLUMN_LIST);
+      const isVisableAddTask = ref(false);
+      const currentTypeTask = ref("");
+
+      const onAddTask = (taskName) => {
+        isVisableAddTask.value = false;
+        columnList.value.map((column) => {
+          if (column.type === currentTypeTask.value) {
+            column.items.push({
+              name: taskName,
+              id: Date.now(),
+              status: currentTypeTask.value
+            })
+          }
+        })
+      }
+
+      const onOpenAddTaskDialog = (column) => {
+        isVisableAddTask.value = true;
+        currentTypeTask.value = column?.type;
+      }
 
       return {
         columnList,
+        isVisableAddTask,
+        onOpenAddTaskDialog,
+        onAddTask,
       }
     }
   })
