@@ -1,15 +1,15 @@
 <script lang="ts">
-import { ref, computed, defineComponent, PropType } from 'vue';
+import { ref, computed, defineComponent, PropType, inject } from 'vue';
 import KanbanCard from '../molecules/KanbanCard.vue';
 import { VueDraggableNext } from 'vue-draggable-next';
-import { ICard } from '../../utils/types';
+import { ICard, IColumn } from '../../utils/types';
 
 
 export default defineComponent({
   name: "kanbanColumn",
   props: {
     column: {
-      type: Object,
+      type: Object as PropType<IColumn>,
       required: true,
     },
     cardList: Array as PropType<ICard[]>
@@ -19,13 +19,21 @@ export default defineComponent({
     draggable: VueDraggableNext,
     KanbanCard,
   },
-  emits: ['openAddTaskDialog'],
+  emits: ['openAddTaskDialog', 'handleShowCardMenu', 'handleDeleteCard', 'hanldeEditCard'],
   setup: (props, { emit }) => {
+    const column = computed(() => props.column);
     const openAddTaskDialog = (column: any) => {
       emit('openAddTaskDialog', column);
     }
+    const handleShowCardMenu = (cardId: string) => emit('handleShowCardMenu', cardId);
+    const handleDeleteCard = (cardId: string) => emit('handleDeleteCard', cardId, column?.value.type);
+    const hanldeEditCard = (cardId: string) => emit('hanldeEditCard', cardId);
+
     return {
       openAddTaskDialog,
+      handleShowCardMenu,
+      handleDeleteCard,
+      hanldeEditCard,
     }
   },
 })
@@ -43,6 +51,9 @@ export default defineComponent({
           v-for="element in cardList"
           :key="element.id"
           :card="element"
+          @show-menu-task="handleShowCardMenu"
+          @delete-card="handleDeleteCard"
+          @edit-card="hanldeEditCard"
         />
       </transition-group>
     </draggable>

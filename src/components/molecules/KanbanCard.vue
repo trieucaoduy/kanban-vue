@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { emit } from 'process';
+import { defineComponent, computed, ref, inject } from 'vue';
 
 export default defineComponent({
   name: "KanbanCard",
@@ -9,14 +10,27 @@ export default defineComponent({
       required: true,
     },
   },
-  setup: (props) => {
+  emits: ['editCard', 'deleteCard'],
+  setup: (_, { emit }) => {
     const visibleMenuTask = ref(false);
 
-    const showMenuTask = () => visibleMenuTask.value = !visibleMenuTask.value;
+    const showMenuTask = () => {
+      visibleMenuTask.value = !visibleMenuTask.value;
+    }
+
+    const editCard = (cardId: string) => {
+      emit('editCard', cardId);
+    }
+
+    const deleteCard = (cardId: string) => {
+      emit('deleteCard', cardId);
+    }
 
     return {
       visibleMenuTask,
       showMenuTask,
+      editCard,
+      deleteCard,
     };
   },
 })
@@ -26,14 +40,15 @@ export default defineComponent({
   <div class="rounded-md cursor-grab bg-white shadow px-3 py-4 my-4">
     <div class="flex justify-between gap-1">
       <div class="kanban-card__title text-ellipsis overflow-hidden font-bold cursor-pointer">{{ card.name }}</div>
+      <div v-if="visibleMenuTask" class="cursor-default fixed inset-0 transition-opacity" @click="showMenuTask()"></div>
       <div class="relative inline-block text-left">
-        <div class="cursor-pointer w-2" @click="showMenuTask()">
-          <i class="fa-solid fa-ellipsis-vertical" id="menu-button" aria-expanded="true" aria-haspopup="true"></i>
+        <div class="cursor-pointer w-2" @click="showMenuTask()" id="menu-button" aria-expanded="true" aria-haspopup="true">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
         </div>
         <div v-if="visibleMenuTask" class="absolute right-0 z-10 mt-2 w-35 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
           <div class="py-1" role="none">
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Edit</a>
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Delete</a>
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0" @click="editCard(card.id)">Edit</a>
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1" @click="deleteCard(card.id)">Delete</a>
           </div>
         </div>
       </div>

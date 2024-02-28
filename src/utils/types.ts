@@ -1,7 +1,14 @@
 interface ICard {
     name: string;
-    id: number;
+    id: string;
     status: string;
 }
 
-export { ICard }
+interface IColumn {
+    type: string,
+    title: string,
+    color: string,
+    items: ICard[]
+}
+
+export { ICard, IColumn }
