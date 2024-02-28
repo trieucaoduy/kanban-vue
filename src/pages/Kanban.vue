@@ -67,7 +67,7 @@
         columnList.value.map((c) => {
           if (c.type === columnType) {
             const findCardIndex = c.items.findIndex((item) => item.id === cardId);
-            console.log({ findCardIndex })
+            
             if (findCardIndex != -1) c.items.splice(findCardIndex, 1);
           }
         })
