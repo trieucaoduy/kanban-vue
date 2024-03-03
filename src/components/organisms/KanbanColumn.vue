@@ -1,33 +1,34 @@
 <script lang="ts">
-import { ref, computed, defineComponent, PropType, inject } from 'vue';
-import KanbanCard from '../molecules/KanbanCard.vue';
-import { VueDraggableNext } from 'vue-draggable-next';
-import { ICard, IColumn } from '../../utils/types';
-
+import { computed, defineComponent, PropType } from "vue"
+import KanbanCard from "../molecules/KanbanCard.vue"
+import { VueDraggableNext } from "vue-draggable-next"
+import { ICard, IColumn } from "../../utils/types"
 
 export default defineComponent({
-  name: "kanbanColumn",
+  name: "KanbanColumn",
   props: {
     column: {
       type: Object as PropType<IColumn>,
       required: true,
     },
-    cardList: Array as PropType<ICard[]>
+    // eslint-disable-next-line vue/require-default-prop
+    cardList: Array as PropType<ICard[]>,
   },
-  display: 'Transition',
+  display: "Transition",
   components: {
     draggable: VueDraggableNext,
     KanbanCard,
   },
-  emits: ['openAddTaskDialog', 'handleShowCardMenu', 'handleDeleteCard', 'hanldeEditCard'],
+  emits: ["openAddTaskDialog", "handleShowCardMenu", "handleDeleteCard", "hanldeEditCard"],
   setup: (props, { emit }) => {
-    const column = computed(() => props.column);
+    const column = computed(() => props.column)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const openAddTaskDialog = (column: any) => {
-      emit('openAddTaskDialog', column);
+      emit("openAddTaskDialog", column)
     }
-    const handleShowCardMenu = (cardId: string) => emit('handleShowCardMenu', cardId);
-    const handleDeleteCard = (cardId: string) => emit('handleDeleteCard', cardId, column?.value.type);
-    const hanldeEditCard = (cardId: string) => emit('hanldeEditCard', cardId);
+    const handleShowCardMenu = (cardId: string) => emit("handleShowCardMenu", cardId)
+    const handleDeleteCard = (cardId: string) => emit("handleDeleteCard", cardId, column?.value.type)
+    const hanldeEditCard = (cardId: string) => emit("hanldeEditCard", cardId)
 
     return {
       openAddTaskDialog,
@@ -42,10 +43,16 @@ export default defineComponent({
 <template>
   <div class="kanban-column bg-slate-50 rounded-lg w-80 p-4 mx-2 h-fit">
     <div class="flex justify-between mt-3">
-      <h2 class="font-bold uppercase text-ellipsis overflow-hidden" :style="{ 'color': column.color }">{{ column.title }}</h2>
+      <h2 class="font-bold uppercase text-ellipsis overflow-hidden" :style="{ color: column.color }">
+        {{ column.title }}
+      </h2>
       <i class="fa-solid fa-bars handle cursor-pointer"></i>
     </div>
-    <draggable class="kanban-column__drag-area overflow-auto dragArea list-group w-full my-2" :list="cardList" group="people">
+    <draggable
+      class="kanban-column__drag-area overflow-auto dragArea list-group w-full my-2"
+      :list="cardList"
+      group="people"
+    >
       <transition-group type="transition" name="flip-list">
         <KanbanCard
           v-for="element in cardList"

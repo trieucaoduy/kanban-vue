@@ -1,6 +1,5 @@
 <script lang="ts">
-import { emit } from 'process';
-import { defineComponent, computed, ref, inject } from 'vue';
+import { defineComponent, ref } from "vue"
 
 export default defineComponent({
   name: "KanbanCard",
@@ -10,20 +9,20 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['editCard', 'deleteCard'],
+  emits: ["editCard", "deleteCard"],
   setup: (_, { emit }) => {
-    const visibleMenuTask = ref(false);
+    const visibleMenuTask = ref(false)
 
     const showMenuTask = () => {
-      visibleMenuTask.value = !visibleMenuTask.value;
+      visibleMenuTask.value = !visibleMenuTask.value
     }
 
     const editCard = (cardId: string) => {
-      emit('editCard', cardId);
+      emit("editCard", cardId)
     }
 
     const deleteCard = (cardId: string) => {
-      emit('deleteCard', cardId);
+      emit("deleteCard", cardId)
     }
 
     return {
@@ -31,7 +30,7 @@ export default defineComponent({
       showMenuTask,
       editCard,
       deleteCard,
-    };
+    }
   },
 })
 </script>
@@ -42,13 +41,42 @@ export default defineComponent({
       <div class="kanban-card__title text-ellipsis overflow-hidden font-bold cursor-pointer">{{ card.name }}</div>
       <div v-if="visibleMenuTask" class="cursor-default fixed inset-0 transition-opacity" @click="showMenuTask()"></div>
       <div class="relative inline-block text-left">
-        <div class="cursor-pointer w-2" @click="showMenuTask()" id="menu-button" aria-expanded="true" aria-haspopup="true">
+        <div
+          class="cursor-pointer w-2"
+          @click="showMenuTask()"
+          id="menu-button"
+          aria-expanded="true"
+          aria-haspopup="true"
+        >
           <i class="fa-solid fa-ellipsis-vertical"></i>
         </div>
-        <div v-if="visibleMenuTask" class="absolute right-0 z-10 mt-2 w-35 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+        <div
+          v-if="visibleMenuTask"
+          class="absolute right-0 z-10 mt-2 w-35 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabindex="-1"
+        >
           <div class="py-1" role="none">
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0" @click="editCard(card.id)">Edit</a>
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1" @click="deleteCard(card.id)">Delete</a>
+            <a
+              href="#"
+              class="text-gray-700 block px-4 py-2 text-sm"
+              role="menuitem"
+              tabindex="-1"
+              id="menu-item-0"
+              @click="editCard(card.id)"
+              >Edit</a
+            >
+            <a
+              href="#"
+              class="text-gray-700 block px-4 py-2 text-sm"
+              role="menuitem"
+              tabindex="-1"
+              id="menu-item-1"
+              @click="deleteCard(card.id)"
+              >Delete</a
+            >
           </div>
         </div>
       </div>

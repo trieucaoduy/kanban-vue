@@ -1,35 +1,18 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
-import Kanban from '../pages/Kanban.vue';
-import BaseLayout from '../layouts/MainLayout.vue';
-
-// const router = createRouter({
-//   history: createWebHistory(import.meta.env.VITE_API_BASE_URL),
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'BaseLayout',
-//       component: BaseLayout,
-//       children: [
-//         {
-//           path: '/kanban',
-//           component: Kanban
-//         }
-//       ]
-//     },
-//   ]
-// })
+import { createRouter, createWebHistory } from "vue-router"
+import Kanban from "../pages/Kanban.vue"
+import BaseLayout from "../layouts/MainLayout.vue"
 
 const routes = [
   {
-    path: '/',
-    name: 'BaseLayout',
+    path: "/",
+    name: "BaseLayout",
     component: BaseLayout,
     children: [
       {
-        path: '/',
-        component: Kanban
-      }
-    ]
+        path: "/",
+        component: Kanban,
+      },
+    ],
   },
 ]
 

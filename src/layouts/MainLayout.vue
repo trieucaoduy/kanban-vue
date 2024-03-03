@@ -1,5 +1,5 @@
 <template>
-  <Header></Header>
+  <HeaderComponent></HeaderComponent>
   <Separator class="h-[1px] bg-grass6 mb-2" />
 
   <router-view v-slot="{ Component }">
@@ -10,17 +10,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useRouter } from "vue-router";
-import Header from '@/components/molecules/Header.vue'
+import { defineComponent } from "vue"
+import { useRouter } from "vue-router"
+import HeaderComponent from "@/components/molecules/HeaderComponent.vue"
 
 export default defineComponent({
   name: "MainLayout",
-  components: { Header },
+  components: { HeaderComponent },
   setup: () => {
-    const router = useRouter();
-    router.push("/");
-  }
+    const router = useRouter()
+    router.push("/")
+  },
 })
-
 </script>
