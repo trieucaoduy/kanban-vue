@@ -3,6 +3,7 @@ import { computed, defineComponent, PropType } from "vue"
 import KanbanCard from "../molecules/KanbanCard.vue"
 import { VueDraggableNext } from "vue-draggable-next"
 import { ICard, IColumn } from "../../utils/types"
+import NewTaskModal from "../molecules/NewTaskModal.vue"
 
 export default defineComponent({
   name: "KanbanColumn",
@@ -18,23 +19,27 @@ export default defineComponent({
   components: {
     draggable: VueDraggableNext,
     KanbanCard,
+    NewTaskModal,
   },
-  emits: ["openAddTaskDialog", "handleShowCardMenu", "handleDeleteCard", "hanldeEditCard"],
+  emits: ["openAddTaskDialog", "handleShowCardMenu", "handleDeleteCard", "hanldeEditCard", "addTask"],
   setup: (props, { emit }) => {
     const column = computed(() => props.column)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const openAddTaskDialog = (column: any) => {
-      emit("openAddTaskDialog", column)
+    const openAddTaskDialog = () => {
+      emit("openAddTaskDialog", column.value)
     }
     const handleShowCardMenu = (cardId: string) => emit("handleShowCardMenu", cardId)
     const handleDeleteCard = (cardId: string) => emit("handleDeleteCard", cardId, column?.value.type)
     const hanldeEditCard = (cardId: string) => emit("hanldeEditCard", cardId)
+    const addTask = (taskName: string) => {
+      emit("addTask", taskName)
+    }
 
     return {
       openAddTaskDialog,
       handleShowCardMenu,
       handleDeleteCard,
       hanldeEditCard,
+      addTask,
     }
   },
 })
@@ -64,13 +69,7 @@ export default defineComponent({
         />
       </transition-group>
     </draggable>
-    <button
-      class="btn border border-blue-500 rounded text-blue-500 w-full"
-      :style="'font-weight: normal'"
-      @click="openAddTaskDialog(column)"
-    >
-      Add task
-    </button>
+    <NewTaskModal @add-task="addTask" @open-add-task-dialog="openAddTaskDialog" />
   </div>
 </template>
 

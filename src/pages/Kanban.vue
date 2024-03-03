@@ -16,17 +16,16 @@
           @openAddTaskDialog="onOpenAddTaskDialog"
           @hanldeEditCard="onEditCard"
           @handleDeleteCard="onDeleteCard"
+          @addTask="onAddTask"
         />
       </transition-group>
     </draggable>
   </div>
-  <NewTaskModal :visible="isVisableAddTask" @addTask="onAddTask" @hideDialog="onHideDialog" />
 </template>
 <script>
 import { defineComponent, ref } from "vue"
 import { VueDraggableNext } from "vue-draggable-next"
 import KanbanColumn from "@/components/organisms/KanbanColumn.vue"
-import NewTaskModal from "@/components/molecules/NewTaskModal.vue"
 import { COLUMN_LIST } from "@/utils/constants"
 
 export default defineComponent({
@@ -34,7 +33,6 @@ export default defineComponent({
   components: {
     draggable: VueDraggableNext,
     KanbanColumn,
-    NewTaskModal,
   },
   setup: () => {
     const columnList = ref(COLUMN_LIST)
@@ -49,6 +47,11 @@ export default defineComponent({
             name: taskName,
             id: Date.now().toString(),
             status: currentTypeTask.value,
+            desc: "Short description",
+            checklist: [
+              { id: `cl${Date.now().toString()}`, title: "Checklist 1", checked: false },
+              { id: `cl${Date.now().toString()}`, title: "Checklist 2", checked: true },
+            ],
           })
         }
       })

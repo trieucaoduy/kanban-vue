@@ -15,6 +15,7 @@
     "no-unused-vars": "off", // Show error for unused variables
     "@typescript-eslint/no-unused-vars": "error",
     "vue/no-multiple-template-root": "off",
+    "vue/no-v-model-argument": "off",
     "prettier/prettier": [
       "warn",
       {
