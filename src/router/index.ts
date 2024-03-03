@@ -1,15 +1,43 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import Kanban from '../pages/Kanban.vue';
+import BaseLayout from '../layouts/MainLayout.vue';
+
+// const router = createRouter({
+//   history: createWebHistory(import.meta.env.VITE_API_BASE_URL),
+//   routes: [
+//     {
+//       path: '/',
+//       name: 'BaseLayout',
+//       component: BaseLayout,
+//       children: [
+//         {
+//           path: '/kanban',
+//           component: Kanban
+//         }
+//       ]
+//     },
+//   ]
+// })
+
+const routes = [
+  {
+    path: '/',
+    name: 'BaseLayout',
+    component: BaseLayout,
+    children: [
+      {
+        path: '/',
+        component: Kanban
+      }
+    ]
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_API_BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'Kanban',
-      component: Kanban
-    },
-  ]
+  // 4. Provide the history implementation to use. We
+  // are using the hash history for simplicity here.
+  history: createWebHistory(),
+  routes, // short for `routes: routes`
 })
 
 export default router
