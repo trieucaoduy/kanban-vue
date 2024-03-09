@@ -8,10 +8,8 @@ stages:
   - build
   - deploy
 
-reviewdog:
+.pre:
   script:
-    - reviewdog -reporter=gitlab-mr-discussion
-    # Or
     - reviewdog -reporter=gitlab-mr-commit
 
 build:
