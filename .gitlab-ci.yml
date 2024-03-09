@@ -4,11 +4,11 @@ variables:
   CONTAINER_NAME: frontend-kanban-container
 
 stages:
-  - reviewdog
+  - test
   - build
   - deploy
 
-.pre:
+test:
   script:
     - reviewdog -reporter=gitlab-mr-commit
 
