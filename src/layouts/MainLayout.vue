@@ -1,6 +1,5 @@
 <template>
   <HeaderComponent></HeaderComponent>
-  <Separator class="h-[1px] bg-grass6 mb-2" />
 
   <router-view v-slot="{ Component }">
     <KeepAlive>

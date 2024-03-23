@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="kanban pt-2">
     <draggable
       class="dragArea list-group w-full"
       handle=".handle"
@@ -13,20 +13,18 @@
           :key="element.type"
           :column="element"
           :card-list="element.items"
-          @openAddTaskDialog="onOpenAddTaskDialog"
           @hanldeEditCard="onEditCard"
           @handleDeleteCard="onDeleteCard"
-          @addTask="onAddTask"
         />
       </transition-group>
     </draggable>
   </div>
 </template>
 <script>
-import { defineComponent, ref } from "vue"
+import { computed, defineComponent } from "vue"
 import { VueDraggableNext } from "vue-draggable-next"
 import KanbanColumn from "@/components/organisms/KanbanColumn.vue"
-import { COLUMN_LIST } from "@/utils/constants"
+import { useKanbanStore } from "@/stores/kanban"
 
 export default defineComponent({
   name: "KanbanPage",
@@ -35,34 +33,8 @@ export default defineComponent({
     KanbanColumn,
   },
   setup: () => {
-    const columnList = ref(COLUMN_LIST)
-    const isVisableAddTask = ref(false)
-    const currentTypeTask = ref("")
-
-    const onAddTask = (taskName) => {
-      isVisableAddTask.value = false
-      columnList.value.map((column) => {
-        if (column.type === currentTypeTask.value) {
-          column.items.push({
-            name: taskName,
-            id: Date.now().toString(),
-            status: currentTypeTask.value,
-            desc: "Short description",
-            checklist: [
-              { id: `cl${Date.now().toString()}`, title: "Checklist 1", checked: false },
-              { id: `cl${Date.now().toString()}`, title: "Checklist 2", checked: true },
-            ],
-          })
-        }
-      })
-    }
-
-    const onHideDialog = () => (isVisableAddTask.value = false)
-
-    const onOpenAddTaskDialog = (column) => {
-      isVisableAddTask.value = true
-      currentTypeTask.value = column?.type
-    }
+    const { columns } = useKanbanStore()
+    const columnList = computed(() => columns)
 
     const onDeleteCard = (cardId, columnType) => {
       columnList.value.map((c) => {
@@ -78,13 +50,19 @@ export default defineComponent({
 
     return {
       columnList,
-      isVisableAddTask,
-      onOpenAddTaskDialog,
-      onAddTask,
       onDeleteCard,
       onEditCard,
-      onHideDialog,
     }
   },
 })
 </script>
+
+<style scoped>
+.kanban {
+  background: url("../../src/assets/bg.jpeg");
+  min-height: calc(100vh - 51px);
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+</style>

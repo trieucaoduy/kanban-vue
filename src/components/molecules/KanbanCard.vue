@@ -1,15 +1,16 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { ICard } from "@/utils/types"
+import { PropType, defineComponent, ref } from "vue"
 
 export default defineComponent({
   name: "KanbanCard",
   props: {
     card: {
-      type: Object,
+      type: Object as PropType<ICard>,
       required: true,
     },
   },
-  emits: ["editCard", "deleteCard"],
+  emits: ["editCard", "deleteCard", "openCardDialog"],
   setup: (_, { emit }) => {
     const visibleMenuTask = ref(false)
 
@@ -25,24 +26,34 @@ export default defineComponent({
       emit("deleteCard", cardId)
     }
 
+    const openCardDialog = (cardId: string) => {
+      emit("openCardDialog", cardId)
+    }
+
     return {
       visibleMenuTask,
       showMenuTask,
       editCard,
       deleteCard,
+      openCardDialog,
     }
   },
 })
 </script>
 
 <template>
-  <div class="rounded-md cursor-grab bg-white shadow px-3 py-4 my-4">
+  <div
+    class="rounded-md cursor-grab bg-white shadow px-3 py-4 my-4 z-10 max-w-72 w-full"
+    @click="openCardDialog(card.cardId)"
+  >
     <div class="flex justify-between gap-1">
-      <div class="kanban-card__title text-ellipsis overflow-hidden font-bold cursor-pointer">{{ card.name }}</div>
+      <div class="kanban-card__title cursor-pointer w-full">
+        <p class="whitespace-nowrap font-bold text-base text-ellipsis overflow-hidden">{{ card.cardName }}</p>
+      </div>
       <div v-if="visibleMenuTask" class="cursor-default fixed inset-0 transition-opacity" @click="showMenuTask()"></div>
       <div class="relative inline-block text-left">
         <div
-          class="cursor-pointer w-2"
+          class="cursor-pointer w-2 z-20"
           @click="showMenuTask()"
           id="menu-button"
           aria-expanded="true"
@@ -65,7 +76,7 @@ export default defineComponent({
               role="menuitem"
               tabindex="-1"
               id="menu-item-0"
-              @click="editCard(card.id)"
+              @click="editCard(card.cardId)"
               >Edit</a
             >
             <a
@@ -74,19 +85,26 @@ export default defineComponent({
               role="menuitem"
               tabindex="-1"
               id="menu-item-1"
-              @click="deleteCard(card.id)"
+              @click="deleteCard(card.cardId)"
               >Delete</a
             >
           </div>
         </div>
       </div>
     </div>
-    <div class="kanban-card__body">
-      <p class="kanban-card__summary py-2">Summay task</p>
+    <div class="kanban-card__body" v-if="card.cardDescription?.length">
+      <p class="kanban-card__summary text-gray-400 text-sm py-2 text-ellipsis overflow-hidden whitespace-nowrap w-5/6">
+        {{ card.cardDescription }}
+      </p>
     </div>
-    <div class="kanban-card__footer flex justify-between">
-      <div class="kanban-card__checklist"><i class="fas fa-tasks"></i> 2/4</div>
-      <div class="kanban-card__due-date">Due 4 days</div>
+    <div class="kanban-card__footer flex justify-between mt-2" v-if="card.cardChecklist && card.cardChecklist?.length">
+      <div
+        class="kanban-card__checklist text-sm text-gray-400"
+        :class="{ 'text-lime-600': card.checklistDone == card.checklistTotal }"
+      >
+        <i class="fas fa-tasks"></i> {{ `${card.checklistDone}/${card.checklistTotal}` }}
+      </div>
+      <div class="kanban-card__due-date text-gray-400 text-sm">Due 4 days</div>
     </div>
   </div>
 </template>

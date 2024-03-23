@@ -15,6 +15,7 @@
     "@radix-ui/colors": "^3.0.0",
     "pinia": "^2.1.7",
     "radix-vue": "^1.4.9",
+    "uuid": "^9.0.1",
     "vue": "^3.4.15",
     "vue-draggable-next": "^2.2.1",
     "vue-router": "^4.3.0"
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/node": "^20.11.24",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "@vitejs/plugin-vue": "^5.0.4",

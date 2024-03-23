@@ -1,9 +1,9 @@
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue"
-import KanbanCard from "../molecules/KanbanCard.vue"
+import { computed, defineComponent, PropType, ref } from "vue"
+import KanbanCard from "@/components/molecules/KanbanCard.vue"
 import { VueDraggableNext } from "vue-draggable-next"
-import { ICard, IColumn } from "../../utils/types"
-import NewTaskModal from "../molecules/NewTaskModal.vue"
+import { ICard, IColumn } from "@/utils/types"
+import { useCardHook } from "@/hooks/card"
 
 export default defineComponent({
   name: "KanbanColumn",
@@ -12,41 +12,55 @@ export default defineComponent({
       type: Object as PropType<IColumn>,
       required: true,
     },
-    // eslint-disable-next-line vue/require-default-prop
-    cardList: Array as PropType<ICard[]>,
+    cardList: {
+      type: Array as PropType<ICard[]>,
+      required: true,
+    },
   },
   display: "Transition",
   components: {
     draggable: VueDraggableNext,
     KanbanCard,
-    NewTaskModal,
   },
-  emits: ["openAddTaskDialog", "handleShowCardMenu", "handleDeleteCard", "hanldeEditCard", "addTask"],
+  emits: ["handleDeleteCard", "hanldeEditCard"],
   setup: (props, { emit }) => {
+    const { addCard } = useCardHook()
+    const visibleDialog = ref(false)
+    const currentCardId = ref("")
     const column = computed(() => props.column)
-    const openAddTaskDialog = () => {
-      emit("openAddTaskDialog", column.value)
-    }
-    const handleShowCardMenu = (cardId: string) => emit("handleShowCardMenu", cardId)
+
+    // TODO:
     const handleDeleteCard = (cardId: string) => emit("handleDeleteCard", cardId, column?.value.type)
     const hanldeEditCard = (cardId: string) => emit("hanldeEditCard", cardId)
-    const addTask = (taskName: string) => {
-      emit("addTask", taskName)
+
+    const onAddCard = (type: string) => {
+      addCard(type)
+    }
+
+    const handleOpenCardDialog = (cardId: string) => {
+      visibleDialog.value = true
+      currentCardId.value = cardId
+    }
+
+    const handleHideCardDialog = () => {
+      visibleDialog.value = !visibleDialog.value
     }
 
     return {
-      openAddTaskDialog,
-      handleShowCardMenu,
+      currentCardId,
+      visibleDialog,
+      onAddCard,
+      handleHideCardDialog,
       handleDeleteCard,
       hanldeEditCard,
-      addTask,
+      handleOpenCardDialog,
     }
   },
 })
 </script>
 
 <template>
-  <div class="kanban-column bg-slate-50 rounded-lg w-80 p-4 mx-2 h-fit">
+  <div class="kanban-column bg-slate-50 rounded-lg min-w-80 w-80 p-4 mx-2 h-fit">
     <div class="flex justify-between mt-3">
       <h2 class="font-bold uppercase text-ellipsis overflow-hidden" :style="{ color: column.color }">
         {{ column.title }}
@@ -61,15 +75,27 @@ export default defineComponent({
       <transition-group type="transition" name="flip-list">
         <KanbanCard
           v-for="element in cardList"
-          :key="element.id"
+          :key="element.cardId"
           :card="element"
-          @show-menu-task="handleShowCardMenu"
           @delete-card="handleDeleteCard"
           @edit-card="hanldeEditCard"
+          @open-card-dialog="handleOpenCardDialog"
         />
       </transition-group>
     </draggable>
-    <NewTaskModal @add-task="addTask" @open-add-task-dialog="openAddTaskDialog" />
+    <button
+      class="btn border border-blue-500 rounded text-blue-500 w-full p-2 font-bold"
+      @click="onAddCard(column.type)"
+    >
+      Add card
+    </button>
+
+    <CardModal
+      v-if="visibleDialog"
+      :card-id="currentCardId"
+      :visible="visibleDialog"
+      @hide-card-dialog="handleHideCardDialog"
+    />
   </div>
 </template>
 

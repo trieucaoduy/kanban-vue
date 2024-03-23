@@ -1,7 +1,12 @@
 interface ICard {
-  name: string
-  id: string
-  status: string
+  cardId: string
+  cardName: string
+  cardGroup: string
+  cardDescription?: string
+  cardChecklist?: ICardChecklist[]
+  checklistTotal?: string | number | null
+  checklistDone?: string | number | null
+  checklistPercent?: string | number | null
 }
 
 interface IColumn {
@@ -11,4 +16,11 @@ interface IColumn {
   items: ICard[]
 }
 
-export { ICard, IColumn }
+interface ICardChecklist {
+  id: string
+  title: string
+  checked: boolean
+  isEdit: boolean
+}
+
+export { ICard, IColumn, ICardChecklist }
