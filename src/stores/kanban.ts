@@ -8,6 +8,19 @@ export const useKanbanStore = defineStore("kanban", () => {
 
   const searchCard = () => {}
 
+  const addColumn = (column: IColumn) => {
+    columns.value.push(column)
+  }
+
+  const editColumn = (column: IColumn) => {
+    columns.value.map((cl) => {
+      if (cl.type === column.type) {
+        cl.title = column.title
+        cl.color = column.color
+      }
+    })
+  }
+
   const addCardToColumn = (columnType: string, card: ICard) => {
     columns.value.map((cl) => {
       if (cl.type === columnType) {
@@ -32,6 +45,8 @@ export const useKanbanStore = defineStore("kanban", () => {
 
   return {
     columns,
+    addColumn,
+    editColumn,
     addCardToColumn,
     getCardInfo,
     editCardInfo,

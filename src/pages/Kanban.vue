@@ -1,5 +1,5 @@
 <template>
-  <div class="kanban pt-2">
+  <div class="kanban pt-2 overflow-y-scroll">
     <draggable
       class="dragArea list-group w-full"
       handle=".handle"
@@ -60,7 +60,7 @@ export default defineComponent({
 <style scoped>
 .kanban {
   background: url("../../src/assets/bg.jpeg");
-  min-height: calc(100vh - 51px);
+  min-height: calc(100vh - 68px);
   background-attachment: fixed;
   background-position: center;
   background-size: cover;

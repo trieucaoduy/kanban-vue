@@ -37,6 +37,7 @@ export default defineComponent({
     const checkListPercent = computed(() => {
       return Math.round((numCheckListDone.value / numCheckListTotal.value) * 100) || 0
     })
+
     const formCardDesc = ref(cardInfo.value.cardDescription ?? "")
     const formCardName = computed({
       get: () => cardInfo.value.cardName,
@@ -99,9 +100,14 @@ export default defineComponent({
     }
 
     const addChecklist = () => {
+      if (checkList.value.length) {
+        const lastItemIndex = checkList.value.length - 1
+        if (checkList.value[lastItemIndex].isEdit === true && !checkList.value[lastItemIndex].title) return
+      }
+
       const newChecklistItem = {
         id: useId(),
-        title: "Check list item",
+        title: "",
         checked: false,
         isEdit: true,
       }
@@ -137,11 +143,11 @@ export default defineComponent({
   <DialogRoot :open="open">
     <DialogPortal>
       <DialogOverlay
-        class="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-30"
+        class="DialogOverlay bg-blackA9 data-[state=open]:animate-overlayShow inset-0 z-30"
         @click="hideCardDialog"
       />
       <DialogContent
-        class="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[768px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[100]"
+        class="DialogContent data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[768px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[100]"
       >
         <div class="task-dialog__header flex justify-between items-center gap-2">
           <label class="task-dialog__title flex items-center text-left gap-2 flex-grow-[9] w-full">
@@ -169,13 +175,13 @@ export default defineComponent({
             </DialogClose>
           </div>
         </div>
-        <div class="task-dialog__body py-4">
+        <div class="task-dialog__body overflow-auto h-[500px] p-4">
           <div class="task-dialog__des mb-2">
             <div class="task-dialog__desc--title flex items-center gap-2 mb-4">
               <i class="fa-solid fa-align-left w-[31px]"></i>
               <p class="font-bold">Description</p>
             </div>
-            <fieldset class="mb-[15px] flex items-center gap-5 ml-[39px]">
+            <fieldset class="mb-[15px] flex items-center gap-5 ml-[39px] mr-4">
               <textarea
                 id="name"
                 class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[65px] p-2 w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
@@ -206,30 +212,36 @@ export default defineComponent({
               </div>
               <div class="task-dialog__checklist--list">
                 <div
-                  class="flex flex-row gap-2 items-center p-1 mb-2 transition-all rounded hover:shadow-lg hover:shadow-mauve-500"
+                  class="flex flex-row gap-2 items-center p-1 mb-2 transition-all"
                   v-for="cl in checkList"
                   :key="cl.id"
                 >
                   <div class="flex justify-center w-[31px]">
                     <CheckboxRoot
                       v-model:checked="cl.checked"
+                      :disabled="!cl.title"
                       class="flex min-w-[18px] min-h-[18px] h-[18px] w-[18px] border-solid border-grass11 border appearance-none items-center justify-center rounded-[4px] bg-white"
+                      :class="{ 'border-gray-400': !cl.title || cl.checked }"
                     >
                       <CheckboxIndicator class="bg-white h-full rounded flex items-center justify-center">
-                        <i class="fa-solid fa-check h-3.5 w-3.5 text-grass11"></i>
+                        <i
+                          class="fa-solid fa-check h-3.5 w-3.5 text-grass11"
+                          :class="{ 'text-gray-400': cl.checked }"
+                        ></i>
                       </CheckboxIndicator>
                     </CheckboxRoot>
                   </div>
                   <label :for="`checklist-${cl.id}`" class="w-full" v-if="cl.isEdit">
                     <input
                       :id="`checklist-${cl.id}`"
-                      class="text-grass11 shadow-green7 focus:shadow-green8 items-center inline-flex p-1 w-full flex-1 justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
+                      class="text-grass11 shadow-green7 focus:shadow-green8 items-center inline-flex p-2 w-full flex-1 justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                       v-model="cl.title"
                       @blur="cl.isEdit = !cl.isEdit"
                     />
                   </label>
                   <p
-                    class="truncate select-none w-full min-h-5 min-w-70"
+                    class="truncate select-none w-full min-h-5 min-w-70 text-sm cursor-pointer"
+                    :class="{ 'line-through text-gray-400': cl.checked }"
                     @click="cl.isEdit = !cl.isEdit"
                     v-if="!cl.isEdit"
                   >
@@ -262,3 +274,24 @@ export default defineComponent({
     </DialogPortal>
   </DialogRoot>
 </template>
+
+<style scoped>
+.DialogOverlay {
+  background: rgba(0 0 0 / 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+}
+
+.DialogContent {
+  min-width: 300px;
+  background: white;
+  padding: 30px;
+  border-radius: 4px;
+}
+</style>

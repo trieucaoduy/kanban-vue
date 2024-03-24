@@ -7,12 +7,15 @@ interface ICard {
   checklistTotal?: string | number | null
   checklistDone?: string | number | null
   checklistPercent?: string | number | null
+  isCompelted?: boolean
+  fromDate?: string
+  toDate?: string
 }
 
 interface IColumn {
   type: string
   title: string
-  color: string
+  color?: string
   items: ICard[]
 }
 

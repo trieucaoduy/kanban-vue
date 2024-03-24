@@ -1,28 +1,12 @@
 const COLUMN_LIST = [
   {
     type: "todo",
-    title: "To do",
+    title: "New board",
     color: "#f59e0b",
-    items: [],
-  },
-  {
-    type: "inprogress",
-    title: "In Progress",
-    color: "#0ea5e9",
-    items: [],
-  },
-  {
-    type: "review",
-    title: "Review",
-    color: "#a78bfa",
-    items: [],
-  },
-  {
-    type: "done",
-    title: "Done",
-    color: "#22c55e",
     items: [],
   },
 ]
 
-export { COLUMN_LIST }
+const COLORS = ["#f59e0b", "#0ea5e9", "#a78bfa", "#22c55e"]
+
+export { COLUMN_LIST, COLORS }
