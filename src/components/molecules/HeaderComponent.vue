@@ -10,7 +10,7 @@
       <KanbanButton
         :text-button="'Add Board'"
         :icon-button="`<i class='fa-solid fa-plus'></i>`"
-        :style-class="`rounded-lg transition-all px-4 py-2 text-sm flex items-center justify-center`"
+        :style-class="`btn-primary rounded-lg transition-all px-4 py-2 text-sm flex items-center justify-center`"
         @click="addBoard"
       />
       <div class="flex gap-5">

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ICard } from "@/utils/types"
 import { PropType, defineComponent, ref } from "vue"
+import KanbanButton from "@/components/atoms/Button.vue"
 
 export default defineComponent({
   name: "KanbanCard",
@@ -9,6 +10,9 @@ export default defineComponent({
       type: Object as PropType<ICard>,
       required: true,
     },
+  },
+  components: {
+    KanbanButton,
   },
   emits: ["editCard", "deleteCard", "openCardDialog"],
   setup: (_, { emit }) => {
@@ -50,11 +54,12 @@ export default defineComponent({
       <div class="kanban-card__title cursor-pointer w-full">
         <p class="whitespace-nowrap font-bold text-base text-ellipsis overflow-hidden">{{ card.cardName }}</p>
       </div>
-      <div v-if="visibleMenuTask" class="cursor-default fixed inset-0 transition-opacity" @click="showMenuTask()"></div>
-      <div
-        class="absolute top-0 right-0 rounded-full transition-all hover:bg-gray-200 flex items-center justify-center w-[28px] h-[28px] p-2 cursor-pointer"
-      >
-        <i class="fa-solid fa-pen w-[13px] h-[13px]"></i>
+      <div class="absolute top-0 right-0">
+        <KanbanButton
+          :is-only-icon="true"
+          :style-class="'rounded-full transition-all hover:bg-gray-200 flex items-center justify-center w-[28px] h-[28px] p-2 cursor-pointer'"
+          :icon-button="`<i class='fa-solid fa-pen w-[13px] h-[13px]'/>`"
+        />
       </div>
     </div>
     <div class="kanban-card__body" v-if="card.cardDescription?.length">
@@ -69,7 +74,7 @@ export default defineComponent({
       >
         <i class="fas fa-tasks"></i> {{ `${card.checklistDone}/${card.checklistTotal}` }}
       </div>
-      <div class="kanban-card__due-date text-gray-400 text-sm">Due 4 days</div>
+      <!-- <div class="kanban-card__due-date text-gray-400 text-sm">Due 4 days</div> -->
     </div>
   </div>
 </template>

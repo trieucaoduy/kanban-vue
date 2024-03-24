@@ -116,7 +116,7 @@ export default defineComponent({
         :is-only-text="true"
         :text-button="'Add Card'"
         :icon-button="`<i class='fa-solid fa-plus'></i>`"
-        :style-class="`rounded-lg transition-all min-w-[30px] w-[30px] h-[30px] flex items-center justify-center`"
+        :style-class="`btn-primary rounded-lg transition-all min-w-[30px] w-[30px] h-[30px] flex items-center justify-center`"
         @click="onAddCard(column.type)"
       />
     </div>

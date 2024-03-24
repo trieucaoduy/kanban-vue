@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="btn-add-card" :class="styleClass">
+  <button type="button" :class="styleClass">
     <div v-if="isOnlyShowIcon" v-html="iconButton"></div>
     <div v-else>
       <div v-if="isOnlyShowText">{{ textButton }}</div>
@@ -51,7 +51,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.btn-add-card {
+.btn-primary {
   background: #4680f7;
   color: #fff;
   box-shadow:
