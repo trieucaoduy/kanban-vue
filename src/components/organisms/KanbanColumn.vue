@@ -100,8 +100,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="kanban-column bg-slate-50 rounded-lg min-w-80 w-80 p-4 mx-2 h-fit">
-    <div class="flex justify-between mt-3 handle cursor-grab gap-5">
+  <div class="kanban-column bg-slate-50 rounded-lg min-w-80 w-80 mx-2 h-fit">
+    <div class="flex justify-between pt-4 px-4 mt-3 handle cursor-grab gap-5">
       <div class="w-full">
         <h2
           v-if="!showChangeColumnName"
@@ -134,7 +134,7 @@ export default defineComponent({
       />
     </div>
     <draggable
-      class="kanban-column__drag-area overflow-auto dragArea list-group w-full my-2"
+      class="kanban-column__drag-area overflow-auto dragArea list-group w-full my-2 pb-4 px-4"
       :list="cardList"
       group="people"
     >
