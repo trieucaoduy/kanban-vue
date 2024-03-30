@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useCardHook } from "@/hooks/card"
 import { useCommonHook } from "@/hooks/common"
-import { computed, defineComponent, ref, watch } from "vue"
+import { computed, defineComponent, nextTick, ref, watch } from "vue"
 
 export default defineComponent({
   props: {
@@ -19,6 +19,7 @@ export default defineComponent({
     const { getCard, editCard } = useCardHook()
     const { useId } = useCommonHook()
 
+    const checklistRef = ref(null)
     const open = computed(() => props.visible ?? false)
     const cardId = computed(() => props.cardId)
     const cardInfo = computed(() => getCard(cardId.value))
@@ -86,6 +87,12 @@ export default defineComponent({
       () => {
         const findIndex = checkList.value.findIndex((cl) => !cl.title && cl.isEdit === false)
         if (findIndex !== -1) checkList.value.splice(findIndex, 1)
+
+        nextTick(() => {
+          if (checklistRef.value?.[0]) {
+            ;(checklistRef.value?.[0] as unknown as HTMLElement)?.focus()
+          }
+        })
       },
       { deep: true }
     )
@@ -113,6 +120,10 @@ export default defineComponent({
       }
 
       checkList.value = [...checkList.value, ...[newChecklistItem]]
+
+      nextTick(() => {
+        ;(checklistRef.value?.[0] as unknown as HTMLElement)?.focus()
+      })
     }
 
     const deleteCheckListItem = (id: string) => {
@@ -131,6 +142,7 @@ export default defineComponent({
       showChangeTitle,
       open,
       checkList,
+      checklistRef,
       addChecklist,
       hideCardDialog,
       addChecklistItem,
@@ -234,6 +246,7 @@ export default defineComponent({
                   <label :for="`checklist-${cl.id}`" class="w-full" v-if="cl.isEdit">
                     <input
                       :id="`checklist-${cl.id}`"
+                      ref="checklistRef"
                       class="text-grass11 shadow-green7 focus:shadow-green8 items-center inline-flex p-2 w-full flex-1 justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                       v-model="cl.title"
                       @blur="cl.isEdit = !cl.isEdit"
