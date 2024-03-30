@@ -78,8 +78,7 @@ export default defineComponent({
         } else {
           originalCardInfo.cardName = formCardName.value
         }
-      },
-      { deep: true }
+      }
     )
 
     watch(
@@ -276,12 +275,12 @@ export default defineComponent({
               </div>
             </div>
           </div>
-          <div class="task-dialog__comment">
+          <!-- <div class="task-dialog__comment">
             <div class="task-dialog__comment--title flex items-center gap-2 mb-4">
               <i class="fa-solid fa-comments p-2"></i>
               <p class="font-bold">Comments</p>
             </div>
-          </div>
+          </div> -->
         </div>
       </DialogContent>
     </DialogPortal>

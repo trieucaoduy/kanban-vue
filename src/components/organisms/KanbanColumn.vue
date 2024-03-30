@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue"
+import { computed, defineComponent, nextTick, PropType, ref, watch } from "vue"
 import KanbanCard from "@/components/molecules/KanbanCard.vue"
 import { VueDraggableNext } from "vue-draggable-next"
 import { ICard, IColumn } from "@/utils/types"
@@ -34,6 +34,7 @@ export default defineComponent({
     const currentCardId = ref("")
     const column = computed(() => props.column)
     const showChangeColumnName = ref(false)
+    const columnNameRef = ref(null)
 
     // TODO:
     const handleDeleteCard = (cardId: string) => emit("handleDeleteCard", cardId, column?.value.type)
@@ -46,6 +47,17 @@ export default defineComponent({
         return value
       },
     })
+
+    watch(
+      () => showChangeColumnName.value,
+      (value) => {
+        if (value) {
+          nextTick(() => {
+            ;(columnNameRef.value as unknown as HTMLElement)?.focus()
+          })
+        }
+      }
+    )
 
     const onAddCard = (type: string) => {
       addCard(type)
@@ -76,6 +88,7 @@ export default defineComponent({
       visibleDialog,
       showChangeColumnName,
       formColumnName,
+      columnNameRef,
       onAddCard,
       handleHideCardDialog,
       handleDeleteCard,
@@ -107,7 +120,7 @@ export default defineComponent({
             v-model="formColumnName"
             style="resize: none"
             @blur="showChangeColumnName = !showChangeColumnName"
-            autofocus
+            ref="columnNameRef"
           />
         </label>
       </div>
